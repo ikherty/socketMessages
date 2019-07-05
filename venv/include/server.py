@@ -1,22 +1,18 @@
-import socket, string
-def do_something(x):
-    lst = map(None, x);
-    lst.reverse();
-    return string.join(lst, "")
-HOST = "" # localhost
-PORT = 33333
-srv = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-srv.bind((HOST, PORT))
-while 1:
-    print("Слушаю порт 33333")
-    srv.listen(1)
-    sock, addr = srv.accept()
-    while 1:
-        pal = sock.recv(1024).decode()
-        if not pal:
-            break
-        print("Получено от %s:%s:" % addr, pal)
-        lap = do_something(pal)
-        print("Отправлено %s:%s:" % addr, lap)
-        sock.send(lap)
-    sock.close()
+# -*- coding: utf-8 -*-
+
+import socket
+
+sock = socket.socket()
+sock.bind(('', 9090))
+sock.listen(1)
+conn, addr = sock.accept()
+
+print ('connected:', addr)
+
+while True:
+    data = conn.recv(1024)
+    if not data:
+        break
+    conn.send(data.upper())
+
+conn.close()
